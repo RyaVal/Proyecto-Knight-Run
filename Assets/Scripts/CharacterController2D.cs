@@ -80,6 +80,12 @@ public class CharacterController2D : MonoBehaviour
     {
         HandleGravity();
         HandleInputMove();
+
+        // Detectar el ataque
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Punch();
+        }
     }
 
     private void FixedUpdate()
@@ -206,6 +212,19 @@ public class CharacterController2D : MonoBehaviour
     public void Punch()
     {
         _animator.SetTrigger(ANIMATION_ATTACK);
+
+        // Detectar enemigos en el radio de ataque
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(punchpoint.position, punchRadious, attackMask);
+
+        foreach (Collider2D collider in colliders)
+        {
+            DamageableController controller = collider.GetComponent<DamageableController>();
+            if (controller != null)
+            {
+                // Aplicar daño
+                controller.TakeDamage(10f, false); // Puedes ajustar el daño según lo que prefieras
+            }
+        }
     }
 
     public void Punch(float damage, bool isPercentage)
