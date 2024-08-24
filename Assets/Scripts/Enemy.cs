@@ -1,18 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float health, maxHealth = 3f;
+    
+    private void Start()
     {
-        
+        health = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage (float damageAmount)
     {
-        
+        health -= damageAmount; // 3 -> 2 -> 1-> 0 = Enemy has died
+
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

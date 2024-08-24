@@ -1,15 +1,15 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class CharacterController2D : MonoBehaviour
 {
     private int ANIMATION_SPEED;
     private int ANIMATION_FORCE;
     private int ANIMATION_FALL;
     private int ANIMATION_ATTACK;
+    private int ANIMATION_SUPER;
     private int ANIMATION_DEAD;
-
 
     [Header("Movement")]
     [SerializeField]
@@ -38,13 +38,30 @@ public class CharacterController2D : MonoBehaviour
     Transform punchpoint;
 
     [SerializeField]
-    float punchRadious;
+    float punchRadius;
 
     [SerializeField]
     LayerMask attackMask;
 
+    [Header("Death")]
     [SerializeField]
     float dieDelay;
+
+    [SerializeField]
+    int playerHealth = 100; // Suponiendo que el jugador tiene una salud inicial de 100
+
+    [SerializeField]
+    string gameOverSceneName = "Last-Scene"; // Nombre de la escena de Game Over
+
+    [Header("Projectile")]
+    [SerializeField]
+    GameObject projectilePrefab;
+
+    [SerializeField]
+    Transform projectilePoint;
+
+    [SerializeField]
+    float projectileLifeTime;
 
     Rigidbody2D _rigidbody;
     Animator _animator;
@@ -68,6 +85,7 @@ public class CharacterController2D : MonoBehaviour
         ANIMATION_FORCE = Animator.StringToHash("force");
         ANIMATION_FALL = Animator.StringToHash("fall");
         ANIMATION_ATTACK = Animator.StringToHash("attack");
+        ANIMATION_SUPER = Animator.StringToHash("super");
         ANIMATION_DEAD = Animator.StringToHash("dead");
     }
 
@@ -81,10 +99,9 @@ public class CharacterController2D : MonoBehaviour
         HandleGravity();
         HandleInputMove();
 
-        // Detectar el ataque
-        if (Input.GetButtonDown("Fire1"))
+        if (playerHealth <= 0)
         {
-            Punch();
+            Die();
         }
     }
 
@@ -187,10 +204,10 @@ public class CharacterController2D : MonoBehaviour
             return;
         }
 
-        bool facingRigth = _inputX > 0.0F;
-        if (isFacingRight != facingRigth)
+        bool facingRight = _inputX > 0.0F;
+        if (isFacingRight != facingRight)
         {
-            isFacingRight = facingRigth;
+            isFacingRight = facingRight;
             transform.Rotate(0.0F, 180.0F, 0.0F);
         }
     }
@@ -212,25 +229,12 @@ public class CharacterController2D : MonoBehaviour
     public void Punch()
     {
         _animator.SetTrigger(ANIMATION_ATTACK);
-
-        // Detectar enemigos en el radio de ataque
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(punchpoint.position, punchRadious, attackMask);
-
-        foreach (Collider2D collider in colliders)
-        {
-            DamageableController controller = collider.GetComponent<DamageableController>();
-            if (controller != null)
-            {
-                // Aplicar daño
-                controller.TakeDamage(10f, false); // Puedes ajustar el daño según lo que prefieras
-            }
-        }
     }
 
     public void Punch(float damage, bool isPercentage)
     {
         Collider2D[] colliders =
-            Physics2D.OverlapCircleAll(punchpoint.position, punchRadious, attackMask);
+            Physics2D.OverlapCircleAll(punchpoint.position, punchRadius, attackMask);
 
         foreach (Collider2D collider in colliders)
         {
@@ -244,20 +248,50 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
+    public void Super()
+    {
+        _animator.SetTrigger(ANIMATION_SUPER);
+    }
+
+    public void Super(float damage, bool isPercentage)
+    {
+        GameObject projectile =
+            Instantiate(projectilePrefab, projectilePoint.position, transform.rotation);
+        ProjectileController controller = projectile.GetComponent<ProjectileController>();
+        controller.Go(damage, isPercentage);
+        Destroy(projectile, projectileLifeTime);
+    }
+
+    // MÃ©todo para manejar la muerte del personaje
     public void Die()
     {
+        // Reproducir la animaciÃ³n de muerte
+        _animator.SetTrigger(ANIMATION_DEAD);
+
+        // Desactivar el control del personaje
+        this.enabled = false;
+
+        // Iniciar la corutina para esperar un tiempo antes de cargar la escena de Game Over
         StartCoroutine(DieCoroutine());
     }
 
     private IEnumerator DieCoroutine()
     {
-        _animator.SetTrigger(ANIMATION_DEAD);
+        // Esperar un tiempo antes de cargar la escena de Game Over
         yield return new WaitForSeconds(dieDelay);
 
+        // Cargar la escena de Game Over
+        SceneManager.LoadScene(gameOverSceneName);
+    }
 
+    // Ejemplo de reducciÃ³n de salud (llamar este mÃ©todo cuando el personaje reciba daÃ±o)
+    public void TakeDamage(int damage)
+    {
+        playerHealth -= damage;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (playerHealth <= 0)
+        {
+            Die();
+        }
     }
 }
-
-// <>
