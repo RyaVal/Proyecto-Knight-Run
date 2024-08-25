@@ -4393,7 +4393,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831156058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.029, y: -1.611, z: 0}
+  m_LocalPosition: {x: -1.931, y: -1.593, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5996,6 +5996,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8277817, y: 0.20801878}
   m_EdgeRadius: 0
+--- !u!1 &1352542017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1352542018}
+  m_Layer: 3
+  m_Name: Punch Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1352542018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352542017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.837, y: -1.353, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1506159600}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1379575280
 GameObject:
   m_ObjectHideFlags: 0
@@ -6615,8 +6646,8 @@ GameObject:
   - component: {fileID: 1506159600}
   - component: {fileID: 1506159599}
   - component: {fileID: 1506159603}
-  - component: {fileID: 1506159601}
   - component: {fileID: 1506159597}
+  - component: {fileID: 1506159601}
   - component: {fileID: 1506159602}
   - component: {fileID: 1506159604}
   m_Layer: 3
@@ -6676,6 +6707,7 @@ Transform:
   - {fileID: 1736895163}
   - {fileID: 974803067}
   - {fileID: 831156059}
+  - {fileID: 1352542018}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6708,7 +6740,7 @@ MonoBehaviour:
   dieDelay: 1.25
   playerHealth: 100
   gameOverSceneName: Last-Scene
-  projectilePrefab: {fileID: 7499034651556456505, guid: 35b38db48d6f494449578c5b72fde677, type: 3}
+  projectilePrefab: {fileID: 3843620498283111547, guid: 660cf2fade98423499d31b5dad74717a, type: 3}
   projectilePoint: {fileID: 831156059}
   projectileLifeTime: 5
 --- !u!114 &1506159602
@@ -6753,7 +6785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0bd4eff1aabaa439f5e94fec989c8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeTimeout: 1
+  chargeTimeout: 1.5
 --- !u!1 &1511008654
 GameObject:
   m_ObjectHideFlags: 0
@@ -7280,6 +7312,7 @@ GameObject:
   - component: {fileID: 1804650730}
   - component: {fileID: 1804650732}
   - component: {fileID: 1804650731}
+  - component: {fileID: 1804650733}
   m_Layer: 0
   m_Name: Knight
   m_TagString: Untagged
@@ -7375,6 +7408,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1804650733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804650729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66316c90f602bf54f87f9a1f1c44c8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackModes:
+  - name: OnPunch
+    damage: 100
+    isPercentage: 1
+  - name: OnSuper
+    damage: 50
+    isPercentage: 1
 --- !u!1 &1809227241
 GameObject:
   m_ObjectHideFlags: 0
