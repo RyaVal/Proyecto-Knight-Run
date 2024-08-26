@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float health, maxHealth = 3f;
+    [SerializeField] float vida;
+    private Animator animator;
     
     private void Start()
     {
-        health = maxHealth;
+        animator = GetComponent<Animator>();
     }
 
-    public void TakeDamage (float damageAmount)
+    public void TomarDaño (float daño)
     {
-        health -= damageAmount; // 3 -> 2 -> 1-> 0 = Enemy has died
+        vida -= daño;
 
-        if(health <= 0)
+        if(vida <= 0)
         {
-            Destroy(gameObject);
+            Muerto();
         }
+    }
+
+    public void Muerto ()
+    {
+        animator.SetTrigger("Muerto");
     }
 }
